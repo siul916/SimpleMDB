@@ -4,7 +4,7 @@ namespace SimpleMDB;
 
 public class HttpRouter
 {
-    
+
     public static readonly int RESPONSE_NOT_SENT_YET = 795;
     private List<HttpMiddleware> middlewares;
     private List<(string, string, HttpMiddleware[] middlewares)> endpoints;
@@ -47,7 +47,7 @@ public class HttpRouter
     }
     public async Task Handle(HttpListenerRequest req, HttpListenerResponse res, Hashtable options)
     {
-        
+
 
         foreach (var middleware in middlewares)
         {
@@ -72,5 +72,5 @@ public class HttpRouter
     }
 
 
-    
+
 }

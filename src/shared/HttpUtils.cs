@@ -1,59 +1,52 @@
 using System.Collections;
 using System.Collections.Specialized;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web;
-using System.IO;
 
 namespace SimpleMDB;
 
 public class HttpUtils
 {
-    public static void AddOptions(Hashtable options, string key, string value)
+    public static void AddOptions(Hashtable options, string name, string key, string value)
     {
-        var prop = (NameValueCollection?)options[key] ?? new NameValueCollection();
-        options[key] = prop;
+        var prop = (NameValueCollection?)options[name] ?? [];
+
+        options[name] = prop;
+
         prop[key] = value;
     }
 
-    public static async Task AddOptions(Hashtable options, string name, NameValueCollection entries)
+    public static void AddOptions(Hashtable options, string name, NameValueCollection entries)
     {
-        var prop = (NameValueCollection?)options[name] ?? new NameValueCollection();
-        options[name] = prop;
-        
-        foreach (string key in entries.AllKeys)
-        {
-            prop[key] = entries[key];
-        }
-        
-        await Task.CompletedTask;
-    }
+        var prop = (NameValueCollection?)options[name] ?? [];
 
-    public static async Task SendResponse(HttpListenerResponse res, Hashtable options, int statuscode, string body)
+        options[name] = prop;
+
+        prop.Add(entries);
+    }
+    public static async Task Respond(HttpListenerRequest req, HttpListenerResponse res, Hashtable options, int statusCode, string body)
     {
         byte[] content = Encoding.UTF8.GetBytes(body);
 
-        res.StatusCode = statuscode;
+        res.StatusCode = statusCode;
         res.ContentEncoding = Encoding.UTF8;
         res.ContentType = "text/html";
         res.ContentLength64 = content.LongLength;
-        await res.OutputStream.WriteAsync(content, 0, content.Length);
+        await res.OutputStream.WriteAsync(content);
         res.Close();
     }
 
     public static async Task Redirect(HttpListenerRequest req, HttpListenerResponse res, Hashtable options, string location)
     {
-        var redirectProps = (NameValueCollection?)options["redirect"] ?? new NameValueCollection();
+        var redirectProps = (NameValueCollection?)options["redirect"] ?? [];
         var query = new List<string>();
         var append = location.Contains('?') ? '&' : '?';
 
         foreach (var key in redirectProps.AllKeys)
         {
-            if (key != null)
-            {
-                query.Add($"{HttpUtility.UrlEncode(key)}={HttpUtility.UrlEncode(redirectProps[key])}");
-            }
+            query.Add($"{HttpUtility.UrlEncode(key)}={HttpUtility.UrlEncode(redirectProps[key])}");
         }
 
         res.Redirect(location + append + string.Join('&', query));
@@ -62,7 +55,7 @@ public class HttpUtils
         await Task.CompletedTask;
     }
 
-    public static async Task ReadRequestFormData(HttpListenerRequest req, Hashtable options)
+    public static async Task ReadRequestFormData(HttpListenerRequest req, HttpListenerResponse res, Hashtable options)
     {
         string type = req.ContentType ?? "";
 
@@ -76,17 +69,19 @@ public class HttpUtils
         }
     }
 
+
     public static readonly NameValueCollection SUPPORTED_IANA_MIME_TYPES = new()
     {
         {".css", "text/css"},
-        {".js", "text/javascript"}
+        {".js", "text/javascript"},
+
     };
 
     public static async Task ServeStaticFile(HttpListenerRequest req, HttpListenerResponse res, Hashtable options)
     {
-        string fileName = req.Url.AbsolutePath ?? "";
-        string filepath = Path.Combine(Environment.CurrentDirectory, "static", fileName.Trim('/', '\\'));
-        string fullPath = Path.GetFullPath(filepath);
+        string fileName = req.Url!.AbsolutePath ?? "";
+        string filePath = Path.Combine(Environment.CurrentDirectory, "static", fileName.Trim('/', '\\'));
+        string fullPath = Path.GetFullPath(filePath);
 
         if (File.Exists(fullPath))
         {
@@ -101,7 +96,8 @@ public class HttpUtils
             await fs.CopyToAsync(res.OutputStream);
             res.Close();
         }
-        
-        await Task.CompletedTask;
     }
+
+
 }
+

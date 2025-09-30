@@ -2,19 +2,22 @@ namespace SimpleMDB;
 
 public class Result<T>
 {
+    public bool IsValid { get; }
     public T? Value { get; }
     public Exception? Error { get; }
-    public bool IsSuccess => Error == null;
 
     public Result(T value)
     {
+        IsValid = true;
         Value = value;
-        Error = null;
     }
 
     public Result(Exception error)
     {
-        Value = default;
+        IsValid = false;
         Error = error;
     }
 }
+
+
+
