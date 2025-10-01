@@ -10,7 +10,7 @@ public class MySqlMovieRepository : IMovieRepository
     public MySqlMovieRepository(string connectionString)
     {
         this.connectionString = connectionString;
-        //Init();
+       // Init();
     }
 
     private void Init()
@@ -82,8 +82,7 @@ public class MySqlMovieRepository : IMovieRepository
         ";
         cmd.Parameters.AddWithValue("@title", movie.Title ?? "");
         cmd.Parameters.AddWithValue("@year", movie.Year);
-        // asegura DBNull cuando movie.description es null
-        cmd.Parameters.AddWithValue("@description", (object?)movie.Description ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("@description", movie.Description ?? "");
         cmd.Parameters.AddWithValue("@rating", movie.Rating);
 
         movie.Id = Convert.ToInt32(await cmd.ExecuteScalarAsync());
@@ -130,7 +129,7 @@ public class MySqlMovieRepository : IMovieRepository
         cmd.Parameters.AddWithValue("@id", id);
         cmd.Parameters.AddWithValue("@title", newMovie.Title ?? "");
         cmd.Parameters.AddWithValue("@year", newMovie.Year);
-        cmd.Parameters.AddWithValue("@description", (object?)newMovie.Description ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("@description", newMovie.Description ?? "");
         cmd.Parameters.AddWithValue("@rating", newMovie.Rating);
 
         return Convert.ToInt32(await cmd.ExecuteNonQueryAsync()) > 0 ? newMovie : null;

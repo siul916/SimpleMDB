@@ -20,23 +20,23 @@ public class App
 
         Console.WriteLine("Server listening on..." + host);
         //var userRepository = new MockUserRepository();
-        var userRepository = new MySqlUserRepository("Server=localhost;Database=simplemdb;Uid=root;Pwd=;");
+        var userRepository = new MySqlUserRepository("Server=localhost;Database=simplemdb;Uid=root;Pwd=Hola23_;");
         var userService = new MockUserService(userRepository);
         var userController = new UserController(userService);
         var authController = new AuthController(userService);
 
         //var actorRepository = new MockActorRepository();
-        var actorRepository = new MySqlActorRepository("Server=localhost;Database=simplemdb;Uid=root;Pwd=;");
+        var actorRepository = new MySqlActorRepository("Server=localhost;Database=simplemdb;Uid=root;Pwd=Hola23_;");
         var actorService = new MockActorService(actorRepository);
         var actorController = new ActorController(actorService);
 
         //var movieRepository = new MockMovieRepository();
-        var movieRepository = new MySqlMovieRepository("Server=localhost;Database=simplemdb;Uid=root;Pwd=;");
+        var movieRepository = new MySqlMovieRepository("Server=localhost;Database=simplemdb;Uid=root;Pwd=Hola23_;");
         var movieService = new MockMovieService(movieRepository);
         var movieController = new MovieController(movieService);
 
         //var actorMovieRepository = new MockActorMovieRepository(actorRepository, movieRepository);
-        var actorMovieRepository = new MySqlActorMovieRepository("Server=localhost;Database=simplemdb;Uid=root;Pwd=hero;");
+        var actorMovieRepository = new MySqlActorMovieRepository("Server=localhost;Database=simplemdb;Uid=root;Pwd=Hola23_;");
         var actorMovieService = new MocklActorMovieService(actorMovieRepository);
         var actorMovieController = new ActorMovieController(actorMovieService, actorService, movieService);
 

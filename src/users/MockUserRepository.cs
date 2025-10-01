@@ -14,9 +14,9 @@ public class MockUserRepository : IUserRepository
 
         var usernames = new string[]
         {
-            "jeremy", "sergio", "derick" ,"jesus",
-            "abril", "avii", "kiara", "antonella",
-            "dariana", "john", "cristal", "ambar"
+            "pedro", "cruz", "luis" ,"carl",
+            "abril", "valentina", "camila", "john",
+            "lucas", "john", "mateo", "sofia"
         };
 
         Random r = new Random();

@@ -12,7 +12,7 @@ public class MockUserService : IUSerService
     public MockUserService(IUserRepository userRepository)
     {
         this.userRepository = userRepository;
-        _ = Create(new User(0, "Admin", "Holasoygerman123", "", Roles.ADMIN));
+        _ = Create(new User(0, "Admin", "hola1234holahola", "", Roles.ADMIN));
     }
     public async Task<Result<PagedResult<User>>> ReadAll(int page, int size)
     {

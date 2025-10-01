@@ -81,8 +81,7 @@ public class MySqlActorRepository : IActorRepository
         ";
         cmd.Parameters.AddWithValue("@firstname", actor.FirstName ?? "");
         cmd.Parameters.AddWithValue("@lastname", actor.LastName ?? "");
-        // asegura DBNull cuando actor.bio es null
-        cmd.Parameters.AddWithValue("@bio", (object?)actor.Bio ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("@bio", actor.Bio ?? "");
         cmd.Parameters.AddWithValue("@rating", actor.Rating);
 
         actor.Id = Convert.ToInt32(await cmd.ExecuteScalarAsync());
@@ -129,7 +128,7 @@ public class MySqlActorRepository : IActorRepository
         cmd.Parameters.AddWithValue("@id", id);
         cmd.Parameters.AddWithValue("@firstname", newActor.FirstName ?? "");
         cmd.Parameters.AddWithValue("@lastname", newActor.LastName ?? "");
-        cmd.Parameters.AddWithValue("@bio", (object?)newActor.Bio ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("@bio", newActor.Bio ?? "");
         cmd.Parameters.AddWithValue("@rating", newActor.Rating);
 
         return Convert.ToInt32(await cmd.ExecuteNonQueryAsync()) > 0 ? newActor : null;
