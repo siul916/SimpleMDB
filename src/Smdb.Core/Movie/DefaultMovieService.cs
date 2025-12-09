@@ -40,7 +40,7 @@ public class DefaultMovieService : IMovieService
 		var movie = await movieRepository.CreateMovie(newMovie);
 		var result = movie == null
 			? new Result<Movie>(
-				new Exception($"Could not create movie {newMovie}."), (int) HttpStatusCode.NotFound)
+			new Exception($"Could not create movie {newMovie}."), (int) HttpStatusCode.NotFound)
 			: new Result<Movie>(movie, (int) HttpStatusCode.Created);
 
 		return result;
@@ -49,10 +49,13 @@ public class DefaultMovieService : IMovieService
 	public async Task<Result<Movie>> ReadMovie(int id)
 	{
 		var movie = await movieRepository.ReadMovie(id);
+
 		var result = movie == null
 			? new Result<Movie>(
 				new Exception($"Could not read movie with id {id}."),
+
 				(int) HttpStatusCode.NotFound)
+
 			: new Result<Movie>(movie, (int) HttpStatusCode.OK);
 
 		return result;
@@ -68,7 +71,9 @@ public class DefaultMovieService : IMovieService
 		var result = movie == null
 			? new Result<Movie>(
 				new Exception($"Could not update movie {newData} with id {id}."),
+
 				(int) HttpStatusCode.NotFound)
+
 			: new Result<Movie>(movie, (int) HttpStatusCode.OK);
 
 		return result;
@@ -79,6 +84,7 @@ public class DefaultMovieService : IMovieService
 
 		var movie = await movieRepository.DeleteMovie(id);
 		var result = movie == null
+
 			? new Result<Movie>(new Exception($"Could not delete movie with id {id}."),
 				(int) HttpStatusCode.NotFound)
 			: new Result<Movie>(movie, (int) HttpStatusCode.OK);
@@ -107,6 +113,7 @@ public class DefaultMovieService : IMovieService
 		if(movieData.Title.Length > 256)
 		{
 			return new Result<Movie>(
+				
 				new Exception("Title cannot be longer than 256 characters."),
 				(int) HttpStatusCode.BadRequest);
 		}

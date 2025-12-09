@@ -15,9 +15,13 @@ public class MemoryMovieRepository : IMovieRepository
 	public async Task<PagedResult<Movie>?> ReadMovies(int page, int size)
 	{
 		int totalCount = db.Movies.Count;
+
 		int start = Math.Clamp((page - 1) * size, 0, totalCount);
+
 		int length = Math.Clamp(size, 0, totalCount - start);
+
 		var values = db.Movies.Slice(start, length);
+		
 		var result = new PagedResult<Movie>(totalCount, values);
 
 		return await Task.FromResult(result);
@@ -26,6 +30,7 @@ public class MemoryMovieRepository : IMovieRepository
 	public async Task<Movie?> CreateMovie(Movie newMovie)
 	{
 		newMovie.Id = db.NextMovieId();
+
 		db.Movies.Add(newMovie);
 
 		return await Task.FromResult(newMovie);
@@ -46,7 +51,9 @@ public class MemoryMovieRepository : IMovieRepository
 		if(result != null)
 		{
 			result.Title = newData.Title;
+
 			result.Year = newData.Year;
+
 			result.Description = newData.Description;
 		}
 
